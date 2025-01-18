@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #6b7280;
+  --accent: #1f2937;
+}
+
+#drag {
+  -webkit-app-region: drag;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 34px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 8px;
+  transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3afc5;
+}
