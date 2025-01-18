@@ -74,7 +74,7 @@ const App = () => {
         <Settings hidden={settingsHidden} setHidden={setSettingsHidden} />
         <button
           onClick={() => setSettingsHidden(!settingsHidden)}
-          className="fixed bottom-4 right-4 text-white focus:rotate-90 transition-transform duration-500"
+          className="fixed bottom-4 right-4 text-white focus:rotate-90 transition-transform duration-500 z-30"
         >
           <SettingsIcon />
         </button>

@@ -52,8 +52,8 @@ export default function Settings({
   return (
     <div
       className={
-        'fixed h-[calc(100vh-24px)] w-full sm:w-80 bottom-0 z-50 transition-transform duration-300 ' +
-        `${hidden ? '-translate-x-full' : 'translate-x-0'}`
+        'fixed w-full sm:w-80 bottom-0 z-40 transition-transform duration-300 ' +
+        `${hidden ? '-translate-y-full h-screen' : 'translate-y-0 h-[calc(100vh-24px)] '}`
       }
     >
       <div className="relative bg-gray-800 px-4 text-white w-full h-full flex flex-col items-center justify-center">

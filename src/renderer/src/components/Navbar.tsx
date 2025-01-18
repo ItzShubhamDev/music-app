@@ -20,7 +20,7 @@ const Navbar = ({ title, color }: { title: string; color: string }) => {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 w-full h-6 flex items-center justify-between px-2 z-30 text-white"
+      className="fixed top-0 left-0 right-0 w-full h-6 flex items-center justify-between px-2 z-50 text-white"
       style={{ backgroundColor: hexToRgba(color, 0.5) }}
     >
       <div className="w-6 h-6">
