@@ -13,15 +13,10 @@ const Navbar = ({ title, color }: { title: string; color: string }) => {
     ipcRenderer.on('maximized', (_, maximized) => {
       setMaximized(maximized)
     })
-  }, [])
-
-  useEffect(() => {
-    if (navigator.onLine) {
-      console.log('Online')
-    } else {
-      console.log('offline')
+    return () => {
+      ipcRenderer.removeAllListeners('maximized')
     }
-  }, [navigator.onLine])
+  }, [])
 
   return (
     <nav

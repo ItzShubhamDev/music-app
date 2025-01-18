@@ -9,10 +9,22 @@ let agent: ytdl.Agent | undefined
 import fs from 'fs'
 import zlib from 'zlib'
 
-if (fs.existsSync('./cookies.json')) {
-  const cookies = JSON.parse(fs.readFileSync('./cookies.json', 'utf-8'))
-  agent = ytdl.createAgent(cookies)
-  console.log('Loaded cookies')
+let settings: {
+  cookies: ytdl.Cookie[]
+  cache: boolean
+} = {
+  cookies: [],
+  cache: true
+}
+
+async function loadSettings() {
+  try {
+    const data = fs.readFileSync('./settings.json')
+    settings = JSON.parse(data.toString())
+  } catch {
+    fs.writeFileSync('./settings.json', JSON.stringify(settings, null, 2))
+  }
+  agent = ytdl.createAgent(settings.cookies)
 }
 
 const ytmusic = new YTMusic()
@@ -37,6 +49,7 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', async () => {
     await ytmusic.initialize()
+    await loadSettings()
     mainWindow.show()
   })
 
@@ -85,14 +98,12 @@ app.whenReady().then(() => {
       fs.mkdirSync(cacheFolder)
     }
     const cachePath = `${cacheFolder}/${videoId}.cache`
-    if (fs.existsSync(cachePath)) {
+    if (fs.existsSync(cachePath) && fs.statSync(cachePath).size !== 0) {
       const cached = fs.createReadStream(cachePath)
       const decompressed = cached.pipe(zlib.createBrotliDecompress())
       const buffer = await streamToBuffer(decompressed)
       return buffer
     }
-    const cache = fs.createWriteStream(cachePath)
-    const compressed = zlib.createBrotliCompress()
     try {
       const response = ytdl(`https://www.youtube.com/watch?v=${videoId}`, {
         filter: 'audioonly',
@@ -100,14 +111,16 @@ app.whenReady().then(() => {
         agent,
         playerClients: ['IOS', 'WEB_CREATOR']
       })
-      response.pipe(compressed)
-      compressed.pipe(cache)
+      if (settings.cache) {
+        const cache = fs.createWriteStream(cachePath)
+        const compressed = zlib.createBrotliCompress()
+        response.pipe(compressed)
+        compressed.pipe(cache)
+      }
       const buffer = await streamToBuffer(response)
       return buffer
     } catch (error) {
       console.error('Failed to load audio', error)
-      cache.close()
-      fs.rmSync(cachePath, { force: true })
       return null
     }
   })
@@ -135,14 +148,12 @@ app.whenReady().then(() => {
       fs.mkdirSync(cacheFolder)
     }
     const cachePath = `${cacheFolder}/${videoId}-img.cache`
-    if (fs.existsSync(cachePath)) {
+    if (fs.existsSync(cachePath) && fs.statSync(cachePath).size !== 0) {
       const cached = fs.createReadStream(cachePath)
       const decompressed = cached.pipe(zlib.createBrotliDecompress())
       const buffer = await streamToBuffer(decompressed)
       return buffer
     }
-    const cache = fs.createWriteStream(cachePath)
-    const compressed = zlib.createBrotliCompress()
     try {
       const info = await ytdl.getBasicInfo(videoId, {
         agent
@@ -151,14 +162,26 @@ app.whenReady().then(() => {
       const r = await fetch(thumbnail.url)
       const arrBuffer = await r.arrayBuffer()
       const buffer = Buffer.from(arrBuffer)
-      Readable.from(buffer).pipe(compressed)
-      compressed.pipe(cache)
+      if (settings.cache) {
+        const cache = fs.createWriteStream(cachePath)
+        const compressed = zlib.createBrotliCompress()
+        Readable.from(buffer).pipe(compressed)
+        compressed.pipe(cache)
+      }
       return buffer
     } catch {
-      cache.close()
-      fs.rmSync(cachePath, { force: true })
       return null
     }
+  })
+
+  ipcMain.handle('getSettings', async () => {
+    return settings
+  })
+
+  ipcMain.handle('updateSettings', async (_, newSettings: typeof settings) => {
+    settings = newSettings
+    fs.writeFileSync('./settings.json', JSON.stringify(settings, null, 2))
+    return
   })
 
   ipcMain.on('minimize', () => {

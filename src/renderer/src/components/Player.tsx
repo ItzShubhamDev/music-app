@@ -135,8 +135,16 @@ const Player = ({
       setColors(colorsHex.slice(0, 3))
       if (!document) return
       const root = document.documentElement
-      if (colorsHex.length >= 1) root.style.setProperty('--primary', colorsHex[0])
-      if (colorsHex.length >= 2) root.style.setProperty('--accent', colorsHex[1])
+      if (colorsHex.length >= 1) {
+        root.style.setProperty('--primary', colorsHex[0])
+      } else {
+        root.style.setProperty('--primary', '#6b7280')
+      }
+      if (colorsHex.length >= 2) {
+        root.style.setProperty('--accent', colorsHex[1])
+      } else {
+        root.style.setProperty('--accent', '#1f2937')
+      }
     }
     getColors()
   }, [cover])

@@ -4,6 +4,8 @@ import Playlist from './components/Playlist'
 import { Music } from './types'
 import Search from './components/Search'
 import Navbar from './components/Navbar'
+import Settings from './components/Settings'
+import { SettingsIcon } from 'lucide-react'
 
 const App = () => {
   const [music, setMusic] = useState<Music | null>(null)
@@ -11,6 +13,7 @@ const App = () => {
   const [queue, setQueue] = useState<Music[]>([])
   const [history, setHistory] = useState<Music[]>([])
   const [colors, setColors] = useState<string[]>([])
+  const [settingsHidden, setSettingsHidden] = useState(true)
 
   useEffect(() => {
     const playlist = localStorage.getItem('playlist') || '[]'
@@ -48,18 +51,16 @@ const App = () => {
           setQueue={setQueue}
           color={colors.length > 0 ? colors[0] : '#6b7280'}
         />
-        <div>
-          <Player
-            music={music}
-            setMusic={setMusic}
-            queue={queue}
-            setQueue={setQueue}
-            history={history}
-            setHistory={setHistory}
-            colors={colors}
-            setColors={setColors}
-          />
-        </div>
+        <Player
+          music={music}
+          setMusic={setMusic}
+          queue={queue}
+          setQueue={setQueue}
+          history={history}
+          setHistory={setHistory}
+          colors={colors}
+          setColors={setColors}
+        />
         <Playlist
           music={music}
           setMusic={setMusic}
@@ -70,6 +71,13 @@ const App = () => {
           setPlaylist={setPlaylist}
           color={colors.length > 0 ? colors[0] : '#6b7280'}
         />
+        <Settings hidden={settingsHidden} setHidden={setSettingsHidden} />
+        <button
+          onClick={() => setSettingsHidden(!settingsHidden)}
+          className="fixed bottom-4 right-4 text-white focus:rotate-90 transition-transform duration-500"
+        >
+          <SettingsIcon />
+        </button>
       </div>
     </div>
   )
