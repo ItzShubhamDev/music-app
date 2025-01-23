@@ -56,23 +56,12 @@ const Playlist = ({
       />
       <Tooltip id="playlist" place="top" noArrow opacity={1} offset={2} />
 
-      <button
-        onClick={() => setHidden(!hidden)}
-        className={
-          'lg:hidden absolute top-1/2 -left-12 translate-x-full text-white transition-transform duration-300 ' +
-          (!hidden ? 'scale-x-[-1] -left-6' : '')
-        }
-        data-tooltip-content={hidden ? 'Show' : 'Hide'}
-        data-tooltip-id="playlist"
-      >
-        <ChevronLeft />
-      </button>
       {hidden ? (
         <button
           onClick={() => setHidden(false)}
           className="lg:hidden absolute top-1/2 -left-12 translate-x-full text-white "
           data-tooltip-content="Hide"
-          data-tooltip-id="search"
+          data-tooltip-id="playlist"
         >
           <ChevronLeft />
         </button>
@@ -81,7 +70,7 @@ const Playlist = ({
           onClick={() => setHidden(true)}
           className="lg:hidden absolute top-1/2 -left-6 translate-x-full text-white "
           data-tooltip-content="Show"
-          data-tooltip-id="search"
+          data-tooltip-id="playlist"
         >
           <ChevronRight />
         </button>

@@ -133,6 +133,7 @@ const Search = ({
               song={song}
               active={false}
               play={() => {
+                console.log(song.videoId)
                 setMusic({
                   name: song.name,
                   artist: song.artist.name,

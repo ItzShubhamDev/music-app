@@ -95,7 +95,7 @@ app.whenReady().then(() => {
 
   // Functions
   ipcMain.handle('play', async (_, videoId: string) => {
-    const cacheFolder = `${userPath}/cache`
+    const cacheFolder = `${userPath}/music-cache`
     if (!fs.existsSync(cacheFolder) || !fs.statSync(cacheFolder).isDirectory()) {
       fs.mkdirSync(cacheFolder)
     }
@@ -145,7 +145,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('thumbnail', async (_, videoId: string) => {
-    const cacheFolder = `${userPath}/cache`
+    const cacheFolder = `${userPath}/music-cache`
     if (!fs.existsSync(cacheFolder) || !fs.statSync(cacheFolder).isDirectory()) {
       fs.mkdirSync(cacheFolder)
     }

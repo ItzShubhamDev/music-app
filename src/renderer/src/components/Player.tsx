@@ -73,7 +73,7 @@ const Player = ({
           const url = URL.createObjectURL(blob)
           audioRef.current.src = url
           audioRef.current.load()
-          await audioRef.current.play()
+          playPause()
           setPlaying(true)
         } else {
           if (history.length > 0) {
