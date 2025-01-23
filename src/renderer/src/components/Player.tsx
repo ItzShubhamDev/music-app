@@ -161,7 +161,14 @@ const Player = ({
       const value = (x / width) * (music?.duration || 0)
       handleProgress(value)
     })
+    return () => {
+      if (progress) {
+        progress.removeEventListener('click', () => {})
+      }
+    }
+  }, [music])
 
+  useEffect(() => {
     const volume = volumeRef.current
     if (!volume) return
     volume.addEventListener('click', (e) => {
@@ -174,9 +181,6 @@ const Player = ({
       audioRef.current.volume = value
     })
     return () => {
-      if (progress) {
-        progress.removeEventListener('click', () => {})
-      }
       if (volume) {
         volume.removeEventListener('click', () => {})
       }

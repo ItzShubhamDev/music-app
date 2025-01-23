@@ -27,7 +27,7 @@ const Navbar = ({ title, color }: { title: string; color: string }) => {
         <Music className="size-4 mt-1" />
       </div>
       <div
-        className="ml-12 text-xs font-semibold w-full text-center overflow-hidden whitespace-nowrap"
+        className="ml-12 mr-2 text-xs font-semibold w-full text-center overflow-hidden whitespace-nowrap"
         id="drag"
       >
         {title}

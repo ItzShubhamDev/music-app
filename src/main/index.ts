@@ -91,9 +91,11 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
+  const userPath = app.getPath('userData')
+
   // Functions
   ipcMain.handle('play', async (_, videoId: string) => {
-    const cacheFolder = './cache'
+    const cacheFolder = `${userPath}/cache`
     if (!fs.existsSync(cacheFolder) || !fs.statSync(cacheFolder).isDirectory()) {
       fs.mkdirSync(cacheFolder)
     }
@@ -143,7 +145,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('thumbnail', async (_, videoId: string) => {
-    const cacheFolder = './cache'
+    const cacheFolder = `${userPath}/cache`
     if (!fs.existsSync(cacheFolder) || !fs.statSync(cacheFolder).isDirectory()) {
       fs.mkdirSync(cacheFolder)
     }
